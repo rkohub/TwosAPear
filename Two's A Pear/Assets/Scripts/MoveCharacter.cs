@@ -10,26 +10,31 @@ public class MoveCharacter : MonoBehaviour{
 
     public float jumpMagnitude;
     private Rigidbody2D body;
-    private float accelerationMagnitude;
+    public float baseAccel;
+    public float accelerationMagnitude;
     public bool coll;
     public int maxJumps;
     private int jumpsUsed;
-    private float maxVelocity;
+    public float baseMaxVelocity;
+    public float maxVelocity;
     private Vector2 force;
+    public float airScalar;
 
     void Start(){
         body = this.gameObject.GetComponent<Rigidbody2D>();
+        // airScalar = 0.75f;
     }
 
     // Update is called once per frame
     void Update(){
         if(coll){
-            accelerationMagnitude = 1.5f;
-            maxVelocity = 3;
+            accelerationMagnitude = baseAccel;
+            maxVelocity = baseMaxVelocity;
         }else{
-            accelerationMagnitude = 1;
-            maxVelocity = 2;
+            accelerationMagnitude = baseAccel * airScalar;
+            maxVelocity = baseMaxVelocity * airScalar;
         }
+
         if(Mathf.Abs(body.velocity[0]) > maxVelocity){
             body.velocity = new Vector2 (Mathf.Sign(body.velocity[0]) * maxVelocity,body.velocity[1]);
         }
